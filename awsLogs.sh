@@ -54,7 +54,7 @@ function activateLogging() {
   awslogs get -S -G --watch ${awslogsArgs} "${groupName}-${envName}"  | while read -r line; do 
     if [[ "${line}" == "${oldLine}" ]]; then continue; fi
     logStatement=$(jq -r '.log' <<< $line | grep '^{')
-    echo -e "${shortName}-${envName} -> ${logStatement}"
+    echo -e "${shortName}-${envName} -> ${logStatement}" | sed -e 's/\\"/"/g'
     oldLine="${line}"
   done
   return 0
